@@ -1,0 +1,9 @@
+[submodule "external/ImGuizmo"]
+	path = external/ImGuizmo
+	url = git@github.com:CedricGuillemet/ImGuizmo.git
+[submodule "external/imgui"]
+	path = external/imgui
+	url = git@github.com:bunbun205/imgui.git
+[submodule "external/spdlog"]
+	path = external/spdlog
+	url = git@github.com:bunbun205/spdlog.git
