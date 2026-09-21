@@ -4,16 +4,75 @@
 
 #include "Application.hpp"
 
+#include <GLFW/glfw3.h>
+#include <glm/ext/scalar_common.hpp>
+
+#include <Mango/Core/Log.hpp>
+#include <Mango/Core/Core.hpp>
+#include <Mango/Core/Input.hpp>
+
 namespace Mango {
+	Application* Application::s_Instance = nullptr;
+
 	Application::Application() {}
 
 	Application::~Application() {}
 
-	void Application::Start() {}
+	void Application::Start() {
+		MANGO_CORE_ASSERT(!s_Instance, "Application already exists!");
+		s_Instance = this;
 
-	void Application::Close() {}
+		m_Window = std::unique_ptr<Window>(Window::Create());
+		m_Window->SetEventCallback(BIND_EVENT_FN(Application::OnEvent));
+
+		m_Running = true;
+	}
+
+	void Application::Close() {
+		for (Layer* layer : m_LayerStack) {
+			layer->OnDetach();
+		}
+	}
+
+	void Application::OnEvent(Event &e) {
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(Application::OnWindowClose));
+
+		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();) {
+			(*--it)->OnEvent(e);
+			if (e.Handled())
+				break;
+		}
+	}
+
+	void Application::PushLayer(Layer *layer) {
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer *overlay) {
+		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
+	}
+
+	bool Application::OnWindowClose(WindowCloseEvent &e) {
+		m_Running = false;
+		Close();
+		return true;
+	}
 
 	void Application::Run() {
-		while (true) {}
+		while (m_Running) {
+			float time = (float) glfwGetTime();
+			m_FrameTime = time - m_LastFrameTime;
+			m_Timestep = glm::min<float>(m_FrameTime, 0.0333f);
+			m_LastFrameTime = time;
+			for (Layer* layer : m_LayerStack)
+				layer->OnUpdate(m_Timestep);
+			for (Layer* layer : m_LayerStack)
+				layer->OnRender();
+
+			m_Window->OnUpdate();
+		}
 	}
 } // Mango

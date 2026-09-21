@@ -1,7 +1,5 @@
 add_library( Mango STATIC )
 
-target_compile_features ( Mango PRIVATE cxx_std_26 )
-
 file (GLOB_RECURSE CORE_SOURCES
 	  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 	  "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
@@ -16,6 +14,10 @@ target_include_directories ( Mango PUBLIC
 							 ${CMAKE_SOURCE_DIR}/external/spdlog/include
 )
 
+target_precompile_headers ( Mango PUBLIC
+							${CMAKE_CURRENT_SOURCE_DIR}/src/mangopch.hpp
+)
+
 target_link_libraries ( Mango PUBLIC
 						glfw
 						Vulkan::Vulkan
@@ -27,10 +29,12 @@ set_target_properties (Mango PROPERTIES
 					   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${OUTPUT_DIR}/Mango
 )
 
-target_compile_definitions (Mango PRIVATE
-							$<$<CONFIG:Debug>:DEBUG>
-							$<$<CONFIG:Release>:RELEASE>
-							$<$<CONFIG:Debug>:MANGO_USE_VULKAN_VALIDATION>
+target_compile_definitions(Mango PRIVATE
+						   $<$<CONFIG:Debug>:DEBUG>
+						   $<$<CONFIG:Release>:RELEASE>
+						   $<$<CONFIG:Debug>:MANGO_USE_VULKAN_VALIDATION>
+						   $<$<PLATFORM_ID:Windows>:NOMINMAX>
+						   $<$<PLATFORM_ID:Windows>:WIN32_LEAN_AND_MEAN>
 )
 
 if (MSVC)
@@ -39,8 +43,3 @@ if (MSVC)
 							$<$<CONFIG:Release>:/MD>
 	)
 endif ()
-
-target_compile_options(Mango PRIVATE
-					   $<$<CONFIG:Debug>:-g>
-					   $<$<CONFIG:Release>:-O2>
-)

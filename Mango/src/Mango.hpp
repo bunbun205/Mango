@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "Mango/Core/Core.hpp"
 #include "Mango/Core/Application.hpp"
 #include "Mango/Core/Log.hpp"
 

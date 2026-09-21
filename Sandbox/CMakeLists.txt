@@ -33,8 +33,3 @@ if ( MSVC )
 							 $<$<CONFIG:Release>:/MD>
 	)
 endif ()
-
-target_compile_options(Sandbox PRIVATE
-					   $<$<CONFIG:Debug>:-g>
-					   $<$<CONFIG:Release>:-O2>
-)
