@@ -10,7 +10,10 @@ namespace Mango {
 		Application();
 		virtual ~Application();
 
+		// App life cycle
+		void Start();
 		void Run();
+		void Close();
 	};
 
 	Application* CreateApplication();

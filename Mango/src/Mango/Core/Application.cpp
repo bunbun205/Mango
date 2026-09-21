@@ -9,6 +9,10 @@ namespace Mango {
 
 	Application::~Application() {}
 
+	void Application::Start() {}
+
+	void Application::Close() {}
+
 	void Application::Run() {
 		while (true) {}
 	}

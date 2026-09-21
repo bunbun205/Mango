@@ -10,5 +10,4 @@ int main(int argc, char** argv) {
 	Mango::Application* app = Mango::CreateApplication();
 	app->Run();
 	delete app;
-	return 0;
 }
