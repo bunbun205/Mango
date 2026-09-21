@@ -19,7 +19,6 @@ target_precompile_headers ( Mango PUBLIC
 )
 
 target_link_libraries ( Mango PUBLIC
-						glfw
 						Vulkan::Vulkan
 )
 
@@ -39,6 +38,7 @@ target_compile_definitions(Mango PRIVATE
 
 if (MSVC)
 	target_compile_options (Mango PRIVATE
+							/utf-8
 							$<$<CONFIG:Debug>:/MDd>
 							$<$<CONFIG:Release>:/MD>
 	)

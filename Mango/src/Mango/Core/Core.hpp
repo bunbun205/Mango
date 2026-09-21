@@ -6,7 +6,11 @@
 
 #include <Mango/Events/Event.hpp>
 #include <spdlog/fmt/bundled/format.h>
+#ifdef _WIN32
+#include <intrin.h>
+#else
 #include <csignal>
+#endif
 
 template<typename T>
 struct fmt::formatter<T, char, std::enable_if_t<std::is_base_of_v<Mango::Event, T>>>
@@ -16,8 +20,25 @@ struct fmt::formatter<T, char, std::enable_if_t<std::is_base_of_v<Mango::Event, 
 	}
 };
 
-#define MANGO_CORE_ASSERT(x, ...) { if(!(x)) { MANGO_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); raise(SIGTRAP); } }
-#define MANGO_ASSERT(x, ...) { if(!(x)) { MANGO_ERROR("Assertion Failed: {0}", __VA_ARGS__); raise(SIGTRAP); } }
+#ifdef _WIN32
+#define MANGO_DEBUGBREAK() __debugbreak()
+#else
+#define MANGO_DEBUGBREAK() raise(SIGTRAP)
+#endif
+
+#define MANGO_CORE_ASSERT(x, ...) { \
+    if (!(x)) { \
+        MANGO_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+        MANGO_DEBUGBREAK(); \
+    } \
+}
+
+#define MANGO_ASSERT(x, ...) { \
+    if (!(x)) { \
+        MANGO_ERROR("Assertion Failed: {0}", __VA_ARGS__); \
+        MANGO_DEBUGBREAK(); \
+    } \
+}
 
 #define BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
