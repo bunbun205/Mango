@@ -5,7 +5,7 @@
 #include "Application.hpp"
 
 #ifdef MANGO_PLATFORM_LINUX
-// #include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 #elif defined MANGO_PLATFORM_WINDOWS
 #include <Windows.h>
 #endif

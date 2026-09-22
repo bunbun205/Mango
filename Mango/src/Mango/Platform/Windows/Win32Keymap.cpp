@@ -4,6 +4,8 @@
 
 #include "Win32Keymap.hpp"
 
+#ifdef MANGO_PLATFORM_WINDOWS
+
 namespace Mango
 {
     static std::optional<KeyCode> Win32ToMangoKeyCodeTable(int vk)
@@ -161,3 +163,5 @@ namespace Mango
 		return 0;
     }
 } // Mango
+
+#endif
