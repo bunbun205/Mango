@@ -18,8 +18,24 @@ target_precompile_headers ( Mango PUBLIC
 							${CMAKE_CURRENT_SOURCE_DIR}/src/mangopch.hpp
 )
 
-target_link_libraries ( Mango PUBLIC
-						Vulkan::Vulkan
+if( WIN32 )
+	target_link_libraries( Mango PUBLIC
+							d3d12
+							dxgi
+							d3dcompiler
+	)
+else ()
+	target_link_libraries( Mango PUBLIC
+			glfw
+			Vulkan::Vulkan
+	)
+endif ()
+
+target_compile_definitions ( Mango PUBLIC
+			$<$<PLATFORM_ID:Windows>:MANGO_PLATFORM_WINDOWS>
+			$<$<PLATFORM_ID:Windows>:MANGO_RENDERER_DX12>
+			$<$<NOT:$<PLATFORM_ID:Windows>>:MANGO_PLATFORM_LINUX>
+			$<$<NOT:$<PLATFORM_ID:Windows>>:MANGO_RENDERER_VULKAN>
 )
 
 set_target_properties (Mango PROPERTIES

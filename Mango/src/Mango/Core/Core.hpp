@@ -6,10 +6,13 @@
 
 #include <Mango/Events/Event.hpp>
 #include <spdlog/fmt/bundled/format.h>
-#ifdef _WIN32
-#include <intrin.h>
+
+#ifdef MANGO_PLATFORM_WINDOWS
+    #include <intrin.h>
+    #define MANGO_DEBUGBREAK() __debugbreak()
 #else
-#include <csignal>
+    #include <csignal>
+    #define MANGO_DEBUGBREAK() raise(SIGTRAP)
 #endif
 
 template<typename T>
@@ -19,12 +22,6 @@ struct fmt::formatter<T, char, std::enable_if_t<std::is_base_of_v<Mango::Event, 
 		return fmt::formatter<std::string>::format(e.ToString(), ctx);
 	}
 };
-
-#ifdef _WIN32
-#define MANGO_DEBUGBREAK() __debugbreak()
-#else
-#define MANGO_DEBUGBREAK() raise(SIGTRAP)
-#endif
 
 #define MANGO_CORE_ASSERT(x, ...) { \
     if (!(x)) { \
