@@ -4,7 +4,12 @@
 
 #include "Application.hpp"
 
-#include <GLFW/glfw3.h>
+#ifdef MANGO_PLATFORM_LINUX
+// #include <GLFW/glfw3.h>
+#elif defined MANGO_PLATFORM_WINDOWS
+#include <Windows.h>
+#endif
+
 #include <glm/ext/scalar_common.hpp>
 
 #include <Mango/Core/Log.hpp>
@@ -13,6 +18,24 @@
 
 namespace Mango {
 	Application* Application::s_Instance = nullptr;
+
+	static float GetTimeSeconds()
+	{
+#ifdef MANGO_PLATFORM_LINUX
+		return (float) glfwGetTime();
+#elif defined MANGO_PLATFORM_WINDOWS
+		static LARGE_INTEGER s_Frequency = []
+		{
+			LARGE_INTEGER frequency;
+			QueryPerformanceFrequency(&frequency);
+			return frequency;
+		}();
+
+		LARGE_INTEGER now;
+		QueryPerformanceCounter(&now);
+		return (float)((double) now.QuadPart / (double)s_Frequency.QuadPart);
+#endif
+	}
 
 	Application::Application() {}
 
@@ -63,7 +86,7 @@ namespace Mango {
 
 	void Application::Run() {
 		while (m_Running) {
-			float time = (float) glfwGetTime();
+			float time = GetTimeSeconds();
 			m_FrameTime = time - m_LastFrameTime;
 			m_Timestep = glm::min<float>(m_FrameTime, 0.0333f);
 			m_LastFrameTime = time;

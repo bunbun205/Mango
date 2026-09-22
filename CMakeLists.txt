@@ -14,7 +14,9 @@ set ( OUTPUT_DIR "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}/${CMAKE_BUILD_T
 
 set_property ( GLOBAL PROPERTY USE_FOLDERS ON )
 
-find_package ( Vulkan REQUIRED )
+if ( NOT WIN32 )
+	find_package ( Vulkan REQUIRED )
+endif ()
 
 add_subdirectory ( Mango )
 add_subdirectory ( Sandbox )

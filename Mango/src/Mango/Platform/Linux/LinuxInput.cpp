@@ -4,6 +4,8 @@
 
 #include "LinuxInput.hpp"
 
+#ifdef MANGO_PLATFORM_LINUX
+
 #include <GLFW/glfw3.h>
 #include "Mango/Core/Application.hpp"
 
@@ -45,3 +47,4 @@ namespace Mango {
 	}
 
 } // Mango
+#endif

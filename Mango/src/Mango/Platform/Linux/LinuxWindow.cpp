@@ -4,6 +4,8 @@
 
 #include "LinuxWindow.hpp"
 
+#ifdef MANGO_PLATFORM_LINUX
+
 #include <GLFW/glfw3.h>
 
 #include "Mango/Core/Log.hpp"
@@ -20,6 +22,7 @@ namespace Mango {
 	static void GLFWErrorCallback(int error, const char* description) {
 		MANGO_CORE_ERROR("GLFW Error ({0}): {1}", error, description);
 	}
+
 
 	Window* Window::Create(const WindowProps& props) {
 		return new LinuxWindow(props);
@@ -144,3 +147,5 @@ namespace Mango {
 	}
 
 } // Mango
+
+#endif
