@@ -14,6 +14,12 @@ target_include_directories ( Mango PUBLIC
 							 ${CMAKE_SOURCE_DIR}/external/spdlog/include
 )
 
+if(WIN32)
+	target_include_directories( Mango PUBLIC
+			${CMAKE_SOURCE_DIR}/external/glm
+	)
+endif ()
+
 target_precompile_headers ( Mango PUBLIC
 							${CMAKE_CURRENT_SOURCE_DIR}/src/mangopch.hpp
 )
