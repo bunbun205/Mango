@@ -1,7 +1,5 @@
 add_executable ( Sandbox )
 
-target_compile_features ( Sandbox PRIVATE cxx_std_26 )
-
 file ( GLOB_RECURSE Sandbox_SOURCES
 	   "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp"
 	   "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp"
@@ -29,6 +27,7 @@ target_compile_definitions ( Sandbox PRIVATE
 
 if ( MSVC )
 	target_compile_options ( Sandbox PRIVATE
+							 /utf-8
 							 $<$<CONFIG:Debug>:/MDd>
 							 $<$<CONFIG:Release>:/MD>
 	)

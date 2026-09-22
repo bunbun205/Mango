@@ -39,6 +39,7 @@ target_compile_definitions(Mango PRIVATE
 
 if (MSVC)
 	target_compile_options (Mango PRIVATE
+							/utf-8
 							$<$<CONFIG:Debug>:/MDd>
 							$<$<CONFIG:Release>:/MD>
 	)
